@@ -2178,7 +2178,7 @@ if page == "Home":
                 "world maps, small multiples, radar plots and a tic-tac-toe board. On a phone they "
                 "get cramped and the sidebar filters are tucked away.</span></div>"
                 "</div>"
-                "<div style='display:flex;gap:16px;align-items:flex-start;'>"
+                "<div style='display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;'>"
                 "<svg width='54' height='54' viewBox='0 0 64 64' style='flex:none;'>"
                 "<rect x='20' y='10' width='24' height='44' rx='4' fill='#4A6470'/>"
                 "<rect x='22' y='14' width='20' height='36' rx='2' fill='#EEF4F4'/>"
@@ -2189,8 +2189,22 @@ if page == "Home":
                 "<polygon points='50,19 45,27 55,27' fill='#22B8CF'/>"
                 "</svg>"
                 "<div><b style='color:#0C4A5A;'>Rotate your phone</b><br>"
-                "<span style='color:#3E5964;'>If you still prefer to browse on mobile, we highly recommend rotating your screen horizontally (landscape mode) for a better view of the data.</span></div>"
-                "</div>",
+                "<span style='color:#3E5964;'>If you prefer to browse on mobile, we highly recommend rotating your screen horizontally (landscape mode) for a better view of the data.</span></div>"
+                "</div>"
+                "<div style='display:flex;gap:16px;align-items:flex-start;'>"
+                "<svg width='54' height='54' viewBox='0 0 64 64' style='flex:none;'>"
+                "<rect x='22' y='10' width='34' height='34' rx='4' fill='#4A6470'/>"
+                "<rect x='26' y='14' width='26' height='26' rx='2' fill='#EEF4F4'/>"
+                "<path d='M 33 33 L 39 20 L 45 33 M 35 28 H 43' fill='none' stroke='#4A6470' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+                "<rect x='8' y='20' width='34' height='34' rx='4' fill='#22B8CF'/>"
+                "<path d='M 30 29 A 7 7 0 1 0 30 43 A 7 7 0 0 0 37 36 H 30' fill='none' stroke='#FFFFFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+                "</svg>"
+                "<div><b style='color:#0C4A5A;'>Need it in another language?</b><br>"
+                "<span style='color:#3E5964;'>The app is in English, but you can translate it instantly! Open your browser menu (like Chrome or Safari) and tap <b>\"Translate\"</b> to read everything in your preferred language.</span></div>"
+                "</div>"
+                "<p style='color:#5A7480;font-size:14px;margin-top:16px;'>"
+                "You are very welcome to keep browsing on mobile — just expect some scrolling "
+                "and not a perfect view.</p>",
                 unsafe_allow_html=True
             )
             if st.button("Got it, let me in", use_container_width=True, key="desktop_notice_ok"):
@@ -2208,12 +2222,8 @@ if page == "Home":
                 notice_rendered = True
                 break
             except Exception as exc:
-                # st.rerun() and st.stop() signal themselves by raising, so those
-                # must pass straight through instead of being treated as a
-                # broken dialog API.
                 if type(exc).__name__ in ("RerunException", "StopException"):
                     raise
-                # This Streamlit build cannot open a modal; try the next option.
                 continue
 
         if not notice_rendered:
@@ -2231,7 +2241,7 @@ if page == "Home":
                 "This site is built around large interactive charts and a sidebar of filters. "
                 "On a phone they get cramped.</div>"
                 "</div>"
-                "<div style='display:flex;gap:14px;align-items:center;'>"
+                "<div style='display:flex;gap:14px;align-items:center;margin-bottom:10px;'>"
                 "<svg width='42' height='42' viewBox='0 0 64 64' style='flex:none;'>"
                 "<rect x='20' y='10' width='24' height='44' rx='4' fill='#4A6470'/>"
                 "<rect x='22' y='14' width='20' height='36' rx='2' fill='#EEF4F4'/>"
@@ -2242,7 +2252,18 @@ if page == "Home":
                 "<polygon points='50,19 45,27 55,27' fill='#22B8CF'/>"
                 "</svg>"
                 "<div><b>Rotate your phone</b><br>"
-                "If you still prefer to browse on mobile, rotate your screen horizontally for a better view.</div>"
+                "If you prefer to browse on mobile, rotate your screen horizontally for a better view.</div>"
+                "</div>"
+                "<div style='display:flex;gap:14px;align-items:center;'>"
+                "<svg width='42' height='42' viewBox='0 0 64 64' style='flex:none;'>"
+                "<rect x='22' y='10' width='34' height='34' rx='4' fill='#4A6470'/>"
+                "<rect x='26' y='14' width='26' height='26' rx='2' fill='#EEF4F4'/>"
+                "<path d='M 33 33 L 39 20 L 45 33 M 35 28 H 43' fill='none' stroke='#4A6470' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+                "<rect x='8' y='20' width='34' height='34' rx='4' fill='#22B8CF'/>"
+                "<path d='M 30 29 A 7 7 0 1 0 30 43 A 7 7 0 0 0 37 36 H 30' fill='none' stroke='#FFFFFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+                "</svg>"
+                "<div><b>Need it in another language?</b><br>"
+                "Use the \"Translate\" option built right into your browser menu (Chrome, Safari, etc.).</div>"
                 "</div>"
                 "</div>",
                 unsafe_allow_html=True

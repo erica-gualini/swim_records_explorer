@@ -1785,10 +1785,25 @@ def build_swim_game_grid(game_df, row_col, col_col, min_answers=3, attempts=400)
 
         matrix = eligible.pivot(index=row_col, columns=col_col, values="valid_answers").notna()
         usable_rows = [r for r in matrix.index if matrix.loc[r].sum() >= 3]
+        usable_cols = [c for c in matrix.columns if matrix[c].sum() >= 3]
 
-        if len(usable_rows) < 3:
+        if len(usable_rows) < 3 or len(usable_cols) < 3:
             continue
 
+        # Draw the columns first, from *all* values that qualify, then look for
+        # rows that complete them. Choosing rows first and keeping whatever
+        # columns survived collapsed the board onto the few values (e.g. USA,
+        # Germany, Australia) present in almost every event family, so "New game"
+        # kept returning the same three. Selecting the columns up front lets
+        # every value rotate in.
+        for _ in range(attempts):
+            cols = random.sample(usable_cols, 3)
+            shared_rows = [r for r in usable_rows if matrix.loc[r, cols].all()]
+            if len(shared_rows) >= 3:
+                rows = random.sample(shared_rows, 3)
+                return rows, cols, threshold
+
+        # Fallback to the original row-first search if no column triple worked.
         for _ in range(attempts):
             rows = random.sample(usable_rows, 3)
             shared_cols = [c for c in matrix.columns if matrix.loc[rows, c].all()]

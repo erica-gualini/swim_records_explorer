@@ -2189,7 +2189,7 @@ if page == "Home":
                 "<polygon points='50,19 45,27 55,27' fill='#22B8CF'/>"
                 "</svg>"
                 "<div><b style='color:#0C4A5A;'>Rotate your phone</b><br>"
-                "<span style='color:#3E5964;'>If you prefer to browse on mobile, we highly recommend rotating your screen horizontally (landscape mode) for a better view of the data.</span></div>"
+                "<span style='color:#3E5964;'>If you still prefer to browse on mobile, we highly recommend rotating your screen horizontally (landscape mode) for a better view of the data.</span></div>"
                 "</div>"
                 "<div style='display:flex;gap:16px;align-items:flex-start;'>"
                 "<svg width='54' height='54' viewBox='0 0 64 64' style='flex:none;'>"
@@ -2202,9 +2202,8 @@ if page == "Home":
                 "<div><b style='color:#0C4A5A;'>Need it in another language?</b><br>"
                 "<span style='color:#3E5964;'>The app is in English, but you can translate it instantly! Open your browser menu (like Chrome or Safari) and tap <b>\"Translate\"</b> to read everything in your preferred language.</span></div>"
                 "</div>"
-                "<p style='color:#5A7480;font-size:14px;margin-top:16px;'>"
-                "You are very welcome to keep browsing on mobile — just expect some scrolling "
-                "and not a perfect view.</p>",
+                "<p style='color:#5A7480;font-size:14px;margin-top:16px;'>",
+                
                 unsafe_allow_html=True
             )
             if st.button("Got it, let me in", use_container_width=True, key="desktop_notice_ok"):
@@ -2252,7 +2251,7 @@ if page == "Home":
                 "<polygon points='50,19 45,27 55,27' fill='#22B8CF'/>"
                 "</svg>"
                 "<div><b>Rotate your phone</b><br>"
-                "If you prefer to browse on mobile, rotate your screen horizontally for a better view.</div>"
+                "If you still prefer to browse on mobile, rotate your screen horizontally for a better view.</div>"
                 "</div>"
                 "<div style='display:flex;gap:14px;align-items:center;'>"
                 "<svg width='42' height='42' viewBox='0 0 64 64' style='flex:none;'>"

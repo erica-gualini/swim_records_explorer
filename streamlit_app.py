@@ -2189,7 +2189,7 @@ if page == "Home":
                 "<polygon points='50,19 45,27 55,27' fill='#22B8CF'/>"
                 "</svg>"
                 "<div><b style='color:#0C4A5A;'>Rotate your phone</b><br>"
-                "<span style='color:#3E5964;'>If you prefer to browse on mobile, we highly recommend rotating your screen horizontally (landscape mode) for a better view of the data.</span></div>"
+                "<span style='color:#3E5964;'>If you still prefer to browse on mobile, we highly recommend rotating your screen horizontally (landscape mode) for a better view of the data.</span></div>"
                 "</div>",
                 unsafe_allow_html=True
             )
@@ -2242,7 +2242,7 @@ if page == "Home":
                 "<polygon points='50,19 45,27 55,27' fill='#22B8CF'/>"
                 "</svg>"
                 "<div><b>Rotate your phone</b><br>"
-                "If you prefer to browse on mobile, rotate your screen horizontally for a better view.</div>"
+                "If you still prefer to browse on mobile, rotate your screen horizontally for a better view.</div>"
                 "</div>"
                 "</div>",
                 unsafe_allow_html=True

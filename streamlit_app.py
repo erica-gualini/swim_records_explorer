@@ -550,6 +550,7 @@ st.markdown(
         padding: 12px 10px; text-align: center; min-height: 64px;
         display: flex; align-items: center; justify-content: center;
         line-height: 1.1; box-shadow: 0 10px 20px -10px rgba(12,74,90,0.4);
+        margin-bottom: 20px;
     }
 
     .game-row-label {
@@ -557,12 +558,16 @@ st.markdown(
         text-transform: uppercase; letter-spacing: 0.02em;
         font-size: 15px; font-weight: 400;
         background: linear-gradient(135deg, #1B6E7E 0%, #2C8093 100%); color: white;
-        border-radius: 16px; padding: 12px 10px; text-align: center; min-height: 72px;
+        border-radius: 16px; padding: 12px 10px; text-align: center; min-height: 78px;
         display: flex; align-items: center; justify-content: center;
         line-height: 1.1; box-shadow: 0 10px 20px -10px rgba(12,74,90,0.35);
     }
 
-    .game-empty-corner { background: transparent; min-height: 64px; }
+     div[class*="st-key-swim_toe_cell_"] button {
+        min-height: 78px !important;
+    }
+
+    .game-empty-corner { background: transparent; min-height: 64px; margin-bottom: 20px;}
 
     div[data-testid="stButton"] button {
         font-family: 'Barlow', system-ui, sans-serif;
@@ -2165,7 +2170,8 @@ if page == "Home":
                 "On a phone they get cramped and the sidebar filters are tucked away. "
                 "**For the full experience, open it on a laptop or desktop.**\n\n"
                 "You are very welcome to keep browsing on mobile — just expect some "
-                "horizontal scrolling."
+                "scrolling and not a perfect view.**\n\n"
+                "Additionally, please ensure your device is set to Light Mode, as our color palettes are not optimized for Dark Mode."
             )
             if st.button("Got it, let me in", use_container_width=True, key="desktop_notice_ok"):
                 st.session_state.desktop_notice_shown = True
@@ -2196,8 +2202,8 @@ if page == "Home":
                 "<b>Best viewed on a computer</b><br>"
                 "This site is built around large interactive charts and a sidebar of filters. "
                 "On a phone they get cramped. For the full experience, open it on a laptop "
-                "or desktop — you can keep browsing on mobile, just expect some horizontal "
-                "scrolling."
+                "or desktop — you can keep browsing on mobile, just expect some scrolling "
+                "and not a perfect view."
                 "</div>",
                 unsafe_allow_html=True
             )
@@ -4132,13 +4138,13 @@ elif page == "Game":
 
     # ---------------- The board ----------------
     if winner is None:
-        header_cols = st.columns(4)
+        header_cols = st.columns([0.85, 1, 1, 1], gap="medium")
         header_cols[0].markdown("<div class='game-empty-corner'></div>", unsafe_allow_html=True)
         for j in range(3):
             header_cols[j + 1].markdown(f"<div class='game-axis-label'>{cols[j]}</div>", unsafe_allow_html=True)
 
         for i in range(3):
-            grid_cols = st.columns(4)
+            grid_cols = st.columns([0.85, 1, 1, 1], gap="medium")
             grid_cols[0].markdown(f"<div class='game-row-label'>{rows[i]}</div>", unsafe_allow_html=True)
 
             for j in range(3):

@@ -2170,7 +2170,7 @@ if page == "Home":
                 "On a phone they get cramped and the sidebar filters are tucked away. "
                 "**For the full experience, open it on a laptop or desktop.**\n\n"
                 "You are very welcome to keep browsing on mobile — just expect some "
-                "scrolling and not a perfect view.**\n\n"
+                "scrolling and not a perfect view.\n\n"
                 "Additionally, please ensure your device is set to Light Mode, as our color palettes are not optimized for Dark Mode."
             )
             if st.button("Got it, let me in", use_container_width=True, key="desktop_notice_ok"):

@@ -40,14 +40,27 @@ WR_FILE = Path("world_records_swimming.xlsx")
 # COLORS
 # ============================================================
 
+# ============================================================
+# COLORS — one role per colour (see the palette slide)
+# ============================================================
+# GOLD  → the highlighted element only: current record / fastest / selected.
+# BLUE  → the primary data series (normal bars and points).
+# AQUA  → the second data series when two are compared.
+# NAVY  → structure: text, axes, outlines, grid — never a data value.
+# GREY  → context / background series ("other", faded reference).
+# CORAL → reserved for a rare third comparison series.
+# The filter widgets use Streamlit's theme primaryColor (see .streamlit/config.toml),
+# a red that appears nowhere in the charts, so red always means "a control".
+
 NAVY = "#052B44"
 BLUE = "#0A6C9F"
 AQUA = "#22B8CF"
 LIGHT_AQUA = "#E8F8FB"
 GOLD = "#D6A937"
-GREY = "#D9E2EC"
+GREY = "#8A9BA5"
+LIGHT_GREY = "#D9E2EC"
 DARK_GREY = "#52616B"
-RED = "#D64545"
+CORAL = "#5A7A8C"
 
 COURSE_COLORS = {
     "LC": BLUE,
@@ -1301,49 +1314,6 @@ def normalize_course(value):
     return "Unknown"
 
 
-# Historical states folded into the country that succeeded them, so that a
-# swimmer racing for East Germany and one racing for reunified Germany count as
-# the same nation everywhere in the app — the choropleth, the per-nation boxes,
-# the athlete cards and, above all, the game board (otherwise "Germany" could
-# appear as three separate columns in the tic-tac-toe grid).
-NATION_ALIASES = {
-    "East Germany": "Germany",
-    "West Germany": "Germany",
-    "Germany (GDR)": "Germany",
-    "Germany (FRG)": "Germany",
-    "Soviet Union": "Russia",
-    "USSR": "Russia",
-    "Unified Team at the Olympics": "Russia",
-    "Unified Team": "Russia",
-    "Russia (ROC)": "Russia",
-    "Serbia and Montenegro": "Serbia",
-    "Yugoslavia": "Serbia",
-    "Czechoslovakia": "Czech Republic",
-    "Netherlands Antilles": "Netherlands",
-    "United States(Cali Condors)": "United States",
-    "USA": "United States",
-    "Great Britain & N.I.": "Great Britain",
-    "Great Britain and Northern Ireland": "Great Britain",
-    # A handful of relay rows list the club or city instead of a nation. Their
-    # country is unambiguous from the club and the venue, so they are mapped here
-    # rather than left as stray "nations" that would pollute the map and the game.
-    "CN Marseille": "France",
-    "Indiana University Hoosiers": "United States",
-    "Santa Clara Swim Club": "United States",
-    "SC Dynamo Berlin": "Germany",
-    "St. Petersburg": "Russia",
-    "?": "Unknown",
-}
-
-
-def modern_nation(value):
-    """Return today's country name for a nationality, collapsing historical states."""
-    name = clean_text(value)
-    if not name:
-        return name
-    return NATION_ALIASES.get(name, name)
-
-
 def parse_distance_from_text(text):
     s = clean_text(text)
     match = re.search(r"\b(4x50|4x100|4x200|50|100|200|400|800|1500)\b", s)
@@ -1533,8 +1503,6 @@ def load_world_records():
     if "nationality" not in df.columns:
         df["nationality"] = "Unknown"
 
-    df["nationality"] = df["nationality"].apply(modern_nation)
-
     if "meet" not in df.columns:
         df["meet"] = ""
 
@@ -1632,8 +1600,6 @@ def load_top_performances():
 
     if "team_name" not in df.columns:
         df["team_name"] = ""
-
-    df["team_name"] = df["team_name"].apply(modern_nation)
 
     if "team_code" not in df.columns:
         df["team_code"] = ""
@@ -1785,25 +1751,10 @@ def build_swim_game_grid(game_df, row_col, col_col, min_answers=3, attempts=400)
 
         matrix = eligible.pivot(index=row_col, columns=col_col, values="valid_answers").notna()
         usable_rows = [r for r in matrix.index if matrix.loc[r].sum() >= 3]
-        usable_cols = [c for c in matrix.columns if matrix[c].sum() >= 3]
 
-        if len(usable_rows) < 3 or len(usable_cols) < 3:
+        if len(usable_rows) < 3:
             continue
 
-        # Draw the columns first, from *all* values that qualify, then look for
-        # rows that complete them. Choosing rows first and keeping whatever
-        # columns survived collapsed the board onto the few values (e.g. USA,
-        # Germany, Australia) present in almost every event family, so "New game"
-        # kept returning the same three. Selecting the columns up front lets
-        # every value rotate in.
-        for _ in range(attempts):
-            cols = random.sample(usable_cols, 3)
-            shared_rows = [r for r in usable_rows if matrix.loc[r, cols].all()]
-            if len(shared_rows) >= 3:
-                rows = random.sample(shared_rows, 3)
-                return rows, cols, threshold
-
-        # Fallback to the original row-first search if no column triple worked.
         for _ in range(attempts):
             rows = random.sample(usable_rows, 3)
             shared_cols = [c for c in matrix.columns if matrix.loc[rows, c].all()]
@@ -2772,7 +2723,7 @@ elif page == "All-Time Top 200 Rankings":
         pointpos=0,
         marker=dict(color=BLUE, size=6, opacity=0.55),
         line=dict(color=NAVY),
-        fillcolor="rgba(34,184,207,0.18)",
+        fillcolor="rgba(10,108,159,0.14)",
         customdata=np.stack(
             [event_data["athlete"], event_data["time_label"], event_data["rank"], event_data["team_name"]],
             axis=-1
@@ -2892,10 +2843,11 @@ elif page == "All-Time Top 200 Rankings":
             y="team_name",
             orientation="h",
             category_orders={"team_name": nation_order},
-            color_discrete_sequence=[AQUA],
+            color_discrete_sequence=[BLUE],
             points="all",
         )
-        fig_nat.update_traces(marker=dict(size=5, opacity=0.5, color=BLUE), line=dict(color=NAVY))
+        fig_nat.update_traces(marker=dict(size=5, opacity=0.5, color=BLUE), line=dict(color=NAVY),
+                              fillcolor="rgba(10,108,159,0.14)")
         fig_nat.update_layout(showlegend=False)
         fig_nat.update_xaxes(title="Time in seconds — further left is faster")
         fig_nat.update_yaxes(title="")
@@ -3213,7 +3165,7 @@ elif page == "Athletes Hall of Fame":
                 pointpos=0,
                 marker=dict(color="rgba(82,97,107,0.30)", size=6),
                 line=dict(color=DARK_GREY),
-                fillcolor="rgba(34,184,207,0.10)",
+                fillcolor="rgba(10,108,159,0.10)",
                 hoverinfo="skip",
                 showlegend=False,
             ))
@@ -3608,6 +3560,7 @@ elif page == "Nations & Places":
             x="current_records",
             y="country",
             orientation="h",
+            # Gold = current records, consistent with its meaning everywhere else.
             color_discrete_sequence=[GOLD],
         )
         fig.update_layout(
@@ -3791,7 +3744,9 @@ elif page == "Compare Events":
         st.info("Showing the first six events — beyond that the lines become hard to follow.")
         chosen = chosen[:6]
 
-    series_colors = [BLUE, GOLD, AQUA, NAVY, RED, DARK_GREY]
+    # Gold is reserved for "the current record / the highlighted one", so it is
+    # kept out of this neutral multi-series palette where every event is equal.
+    series_colors = [BLUE, AQUA, NAVY, CORAL, "#C65BAA", "#7A8B45"]
     color_of = {event: series_colors[i % len(series_colors)] for i, event in enumerate(chosen)}
 
     # ------------------------------------------------------------------

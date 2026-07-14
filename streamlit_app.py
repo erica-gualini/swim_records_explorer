@@ -1331,6 +1331,7 @@ NATION_ALIASES = {
     "Russia (ROC)": "Russia",
     "Serbia and Montenegro": "Serbia",
     "Yugoslavia": "Serbia",
+    "Socialist Federal Republic of Yugoslavia": "Serbia",
     "Czechoslovakia": "Czech Republic",
     "Netherlands Antilles": "Netherlands",
     "United States(Cali Condors)": "United States",
@@ -1355,6 +1356,56 @@ def modern_nation(value):
     if not name:
         return name
     return NATION_ALIASES.get(name, name)
+
+
+# A record's *venue* stores a place, not a nationality — "East Berlin, East
+# Germany", "Moscow, Soviet Union". The country half is updated to today's name,
+# and a few cities are updated too: some were renamed (Leningrad -> Saint
+# Petersburg), some were split (East/West Berlin -> Berlin). Crucially, several
+# Soviet cities are NOT in Russia today (Kyiv is Ukrainian, Tashkent Uzbek), so
+# a blanket "Soviet Union -> Russia" would place them in the wrong country;
+# these are handled explicitly.
+PLACE_CITY_ALIASES = {
+    "East Berlin": "Berlin",
+    "West Berlin": "Berlin",
+    "Leningrad": "Saint Petersburg",
+    "Kiev": "Kyiv",
+}
+
+# Full "City, State" strings whose modern country is not what NATION_ALIASES
+# would give (former Soviet cities now in independent republics).
+PLACE_COUNTRY_OVERRIDES = {
+    "Kyiv": "Ukraine",
+    "Kiev": "Ukraine",
+    "Kharkiv": "Ukraine",
+    "Tashkent": "Uzbekistan",
+    "Baku": "Azerbaijan",
+    "Minsk": "Belarus",
+    "Tallinn": "Estonia",
+}
+
+
+def modern_place(value):
+    """Normalize a 'City, State' venue string to a modern city and country."""
+    place = clean_text(value)
+    if not place or "," not in place:
+        return place
+
+    city, state = [part.strip() for part in place.split(",", 1)]
+
+    # City-level override first (a former Soviet city keeps its real country).
+    if city in PLACE_COUNTRY_OVERRIDES:
+        modern_city = PLACE_CITY_ALIASES.get(city, city)
+        return f"{modern_city}, {PLACE_COUNTRY_OVERRIDES[city]}"
+
+    modern_city = PLACE_CITY_ALIASES.get(city, city)
+    modern_state = NATION_ALIASES.get(state, state)
+
+    # Some rows store "East Germany, East Germany" — the city slot holds a
+    # country. Collapse those to just the modern country.
+    if city in NATION_ALIASES or modern_city == modern_state:
+        return modern_state
+    return f"{modern_city}, {modern_state}"
 
 
 def parse_distance_from_text(text):
@@ -1553,6 +1604,8 @@ def load_world_records():
 
     if "location" not in df.columns:
         df["location"] = ""
+
+    df["location"] = df["location"].apply(modern_place)
 
     if "is_current" in df.columns:
         df["is_current_bool"] = (

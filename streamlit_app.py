@@ -40,14 +40,27 @@ WR_FILE = Path("world_records_swimming.xlsx")
 # COLORS
 # ============================================================
 
+# ============================================================
+# COLORS — one role per colour (see the palette slide)
+# ============================================================
+# GOLD  → the highlighted element only: current record / fastest / selected.
+# BLUE  → the primary data series (normal bars and points).
+# AQUA  → the second data series when two are compared.
+# NAVY  → structure: text, axes, outlines, grid — never a data value.
+# GREY  → context / background series ("other", faded reference).
+# CORAL → reserved for a rare third comparison series.
+# The filter widgets use Streamlit's theme primaryColor (see .streamlit/config.toml),
+# a red that appears nowhere in the charts, so red always means "a control".
+
 NAVY = "#052B44"
 BLUE = "#0A6C9F"
 AQUA = "#22B8CF"
 LIGHT_AQUA = "#E8F8FB"
 GOLD = "#D6A937"
-GREY = "#D9E2EC"
+GREY = "#8A9BA5"
+LIGHT_GREY = "#D9E2EC"
 DARK_GREY = "#52616B"
-RED = "#D64545"
+CORAL = "#5A7A8C"
 
 COURSE_COLORS = {
     "LC": BLUE,
@@ -561,10 +574,9 @@ st.markdown(
         border-radius: 16px; padding: 12px 10px; text-align: center; min-height: 78px;
         display: flex; align-items: center; justify-content: center;
         line-height: 1.1; box-shadow: 0 10px 20px -10px rgba(12,74,90,0.35);
-        margin-right: 14px;
     }
 
-    div[class*="st-key-swim_toe_cell_"] button {
+     div[class*="st-key-swim_toe_cell_"] button {
         min-height: 78px !important;
     }
 
@@ -2166,12 +2178,46 @@ if page == "Home":
 
         def _desktop_notice_body():
             st.markdown(
-                "This site is built around large, interactive charts — world maps, "
-                "small multiples, radar plots and a tic-tac-toe board.\n\n"
-                "On a phone they get cramped and the sidebar filters are tucked away. "
-                "**For the full experience, open it on a laptop or desktop.**\n\n"
-                "You are very welcome to keep browsing on mobile — just expect some "
-                "scrolling and not a perfect view."
+                "<div style='display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;'>"
+                "<svg width='54' height='54' viewBox='0 0 64 64' style='flex:none;'>"
+                "<rect x='9' y='8' width='46' height='34' rx='3' fill='#4A6470'/>"
+                "<rect x='13' y='12' width='38' height='26' fill='#EEF4F4'/>"
+                "<path d='M32 34 L23 25.5 a5.4 5.4 0 1 1 9-6 a5.4 5.4 0 1 1 9 6 Z' fill='#E86A5E'/>"
+                "<path d='M5 46 h54 a4 4 0 0 1 -4 5 H9 a4 4 0 0 1 -4 -5 Z' fill='#B9C6CB'/>"
+                "<rect x='7' y='42' width='50' height='4' rx='1.5' fill='#D3DDE0'/>"
+                "</svg>"
+                "<div><b style='color:#0C4A5A;'>Open it on a computer</b><br>"
+                "<span style='color:#3E5964;'>This site is built around large, interactive charts — "
+                "world maps, small multiples, radar plots and a tic-tac-toe board. On a phone they "
+                "get cramped and the sidebar filters are tucked away.</span></div>"
+                "</div>"
+                "<div style='display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;'>"
+                "<svg width='54' height='54' viewBox='0 0 64 64' style='flex:none;'>"
+                "<rect x='20' y='10' width='24' height='44' rx='4' fill='#4A6470'/>"
+                "<rect x='22' y='14' width='20' height='36' rx='2' fill='#EEF4F4'/>"
+                "<rect x='30' y='12' width='4' height='2' rx='1' fill='#B9C6CB'/>"
+                "<path d='M 14 24 A 18 18 0 0 0 14 40' fill='none' stroke='#E86A5E' stroke-width='3' stroke-linecap='round'/>"
+                "<polygon points='14,45 9,37 19,37' fill='#E86A5E'/>"
+                "<path d='M 50 40 A 18 18 0 0 0 50 24' fill='none' stroke='#22B8CF' stroke-width='3' stroke-linecap='round'/>"
+                "<polygon points='50,19 45,27 55,27' fill='#22B8CF'/>"
+                "</svg>"
+                "<div><b style='color:#0C4A5A;'>Rotate your phone</b><br>"
+                "<span style='color:#3E5964;'>If you still prefer to browse on mobile, we highly recommend rotating your screen horizontally (landscape mode) for a better view of the data.</span></div>"
+                "</div>"
+                "<div style='display:flex;gap:16px;align-items:flex-start;'>"
+                "<svg width='54' height='54' viewBox='0 0 64 64' style='flex:none;'>"
+                "<rect x='22' y='10' width='34' height='34' rx='4' fill='#4A6470'/>"
+                "<rect x='26' y='14' width='26' height='26' rx='2' fill='#EEF4F4'/>"
+                "<path d='M 33 33 L 39 20 L 45 33 M 35 28 H 43' fill='none' stroke='#4A6470' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+                "<rect x='8' y='20' width='34' height='34' rx='4' fill='#22B8CF'/>"
+                "<path d='M 30 29 A 7 7 0 1 0 30 43 A 7 7 0 0 0 37 36 H 30' fill='none' stroke='#FFFFFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+                "</svg>"
+                "<div><b style='color:#0C4A5A;'>Need it in another language?</b><br>"
+                "<span style='color:#3E5964;'>The app is in English, but you can translate it instantly! Open your browser menu (like Chrome or Safari) and tap <b>\"Translate\"</b> to read everything in your preferred language.</span></div>"
+                "</div>"
+                "<p style='color:#5A7480;font-size:14px;margin-top:16px;'>",
+                
+                unsafe_allow_html=True
             )
             if st.button("Got it, let me in", use_container_width=True, key="desktop_notice_ok"):
                 st.session_state.desktop_notice_shown = True
@@ -2188,22 +2234,49 @@ if page == "Home":
                 notice_rendered = True
                 break
             except Exception as exc:
-                # st.rerun() and st.stop() signal themselves by raising, so those
-                # must pass straight through instead of being treated as a
-                # broken dialog API.
                 if type(exc).__name__ in ("RerunException", "StopException"):
                     raise
-                # This Streamlit build cannot open a modal; try the next option.
                 continue
 
         if not notice_rendered:
             st.markdown(
                 "<div class='info-box' style='max-width:820px;margin:8px auto 4px auto;'>"
-                "<b>Best viewed on a computer</b><br>"
+                "<div style='display:flex;gap:14px;align-items:center;margin-bottom:10px;'>"
+                "<svg width='42' height='42' viewBox='0 0 64 64' style='flex:none;'>"
+                "<rect x='9' y='8' width='46' height='34' rx='3' fill='#4A6470'/>"
+                "<rect x='13' y='12' width='38' height='26' fill='#EEF4F4'/>"
+                "<path d='M32 34 L23 25.5 a5.4 5.4 0 1 1 9-6 a5.4 5.4 0 1 1 9 6 Z' fill='#E86A5E'/>"
+                "<path d='M5 46 h54 a4 4 0 0 1 -4 5 H9 a4 4 0 0 1 -4 -5 Z' fill='#B9C6CB'/>"
+                "<rect x='7' y='42' width='50' height='4' rx='1.5' fill='#D3DDE0'/>"
+                "</svg>"
+                "<div><b>Open it on a computer</b><br>"
                 "This site is built around large interactive charts and a sidebar of filters. "
-                "On a phone they get cramped. For the full experience, open it on a laptop "
-                "or desktop — you can keep browsing on mobile, just expect some scrolling "
-                "and not a perfect view."
+                "On a phone they get cramped.</div>"
+                "</div>"
+                "<div style='display:flex;gap:14px;align-items:center;margin-bottom:10px;'>"
+                "<svg width='42' height='42' viewBox='0 0 64 64' style='flex:none;'>"
+                "<rect x='20' y='10' width='24' height='44' rx='4' fill='#4A6470'/>"
+                "<rect x='22' y='14' width='20' height='36' rx='2' fill='#EEF4F4'/>"
+                "<rect x='30' y='12' width='4' height='2' rx='1' fill='#B9C6CB'/>"
+                "<path d='M 14 24 A 18 18 0 0 0 14 40' fill='none' stroke='#E86A5E' stroke-width='3' stroke-linecap='round'/>"
+                "<polygon points='14,45 9,37 19,37' fill='#E86A5E'/>"
+                "<path d='M 50 40 A 18 18 0 0 0 50 24' fill='none' stroke='#22B8CF' stroke-width='3' stroke-linecap='round'/>"
+                "<polygon points='50,19 45,27 55,27' fill='#22B8CF'/>"
+                "</svg>"
+                "<div><b>Rotate your phone</b><br>"
+                "If you still prefer to browse on mobile, rotate your screen horizontally for a better view.</div>"
+                "</div>"
+                "<div style='display:flex;gap:14px;align-items:center;'>"
+                "<svg width='42' height='42' viewBox='0 0 64 64' style='flex:none;'>"
+                "<rect x='22' y='10' width='34' height='34' rx='4' fill='#4A6470'/>"
+                "<rect x='26' y='14' width='26' height='26' rx='2' fill='#EEF4F4'/>"
+                "<path d='M 33 33 L 39 20 L 45 33 M 35 28 H 43' fill='none' stroke='#4A6470' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+                "<rect x='8' y='20' width='34' height='34' rx='4' fill='#22B8CF'/>"
+                "<path d='M 30 29 A 7 7 0 1 0 30 43 A 7 7 0 0 0 37 36 H 30' fill='none' stroke='#FFFFFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+                "</svg>"
+                "<div><b>Need it in another language?</b><br>"
+                "Use the \"Translate\" option built right into your browser menu (Chrome, Safari, etc.).</div>"
+                "</div>"
                 "</div>",
                 unsafe_allow_html=True
             )
@@ -2650,7 +2723,7 @@ elif page == "All-Time Top 200 Rankings":
         pointpos=0,
         marker=dict(color=BLUE, size=6, opacity=0.55),
         line=dict(color=NAVY),
-        fillcolor="rgba(34,184,207,0.18)",
+        fillcolor="rgba(10,108,159,0.14)",
         customdata=np.stack(
             [event_data["athlete"], event_data["time_label"], event_data["rank"], event_data["team_name"]],
             axis=-1
@@ -2770,10 +2843,11 @@ elif page == "All-Time Top 200 Rankings":
             y="team_name",
             orientation="h",
             category_orders={"team_name": nation_order},
-            color_discrete_sequence=[AQUA],
+            color_discrete_sequence=[BLUE],
             points="all",
         )
-        fig_nat.update_traces(marker=dict(size=5, opacity=0.5, color=BLUE), line=dict(color=NAVY))
+        fig_nat.update_traces(marker=dict(size=5, opacity=0.5, color=BLUE), line=dict(color=NAVY),
+                              fillcolor="rgba(10,108,159,0.14)")
         fig_nat.update_layout(showlegend=False)
         fig_nat.update_xaxes(title="Time in seconds — further left is faster")
         fig_nat.update_yaxes(title="")
@@ -3091,7 +3165,7 @@ elif page == "Athletes Hall of Fame":
                 pointpos=0,
                 marker=dict(color="rgba(82,97,107,0.30)", size=6),
                 line=dict(color=DARK_GREY),
-                fillcolor="rgba(34,184,207,0.10)",
+                fillcolor="rgba(10,108,159,0.10)",
                 hoverinfo="skip",
                 showlegend=False,
             ))
@@ -3486,6 +3560,7 @@ elif page == "Nations & Places":
             x="current_records",
             y="country",
             orientation="h",
+            # Gold = current records, consistent with its meaning everywhere else.
             color_discrete_sequence=[GOLD],
         )
         fig.update_layout(
@@ -3669,7 +3744,9 @@ elif page == "Compare Events":
         st.info("Showing the first six events — beyond that the lines become hard to follow.")
         chosen = chosen[:6]
 
-    series_colors = [BLUE, GOLD, AQUA, NAVY, RED, DARK_GREY]
+    # Gold is reserved for "the current record / the highlighted one", so it is
+    # kept out of this neutral multi-series palette where every event is equal.
+    series_colors = [BLUE, AQUA, NAVY, CORAL, "#C65BAA", "#7A8B45"]
     color_of = {event: series_colors[i % len(series_colors)] for i, event in enumerate(chosen)}
 
     # ------------------------------------------------------------------

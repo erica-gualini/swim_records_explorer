@@ -1,0 +1,12 @@
+# Streamlit theme.
+# primaryColor is the accent Streamlit gives to interactive widgets:
+# the multiselect filter tags, the slider handle, links and focus rings.
+# It is deliberately a red that appears NOWHERE in the charts, so that
+# red always reads as "this is a control", never as data.
+[theme]
+base = "light"
+primaryColor = "#E23A3A"
+backgroundColor = "#E9F3F2"
+secondaryBackgroundColor = "#DFF0EF"
+textColor = "#24343B"
+font = "sans serif"
